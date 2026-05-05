@@ -381,6 +381,57 @@ app.post('/api/pair-by-semantic', async (req, res) => {
     }
     res.json({ paired: pairedCount, unpaired: defects.length - pairedCount });
   } catch (err) { res.status(500).json({ error: err.message }); }
+// DVX Defects
+app.get('/api/dvx-defects', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const data = await db.collection('dvx_defects').find().sort({ created_at: -1 }).limit(10000).toArray();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/dvx-defects', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const rows = Array.isArray(req.body) ? req.body : [req.body];
+    const rowsWithDate = rows.map(r => ({ ...r, created_at: r.created_at || new Date().toISOString() }));
+    await db.collection('dvx_defects').insertMany(rowsWithDate);
+    res.json({ success: true, count: rows.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/delete-defects', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const { target } = req.body;
+    if (target === 'DVX') {
+      await db.collection('dvx_defects').deleteMany({});
+    } else if (target === 'SCA' || target === 'YARD') {
+      await db.collection('defect_data').deleteMany({ source: target });
+    } else if (target === 'ALL') {
+      await db.collection('defect_data').deleteMany({});
+      await db.collection('dvx_defects').deleteMany({});
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/final-defect', async (req, res) => {
+  try {
+    const db = await connectDB();
+    const { source } = req.query;
+    const filter = source ? { source } : {};
+    await db.collection('final_defect').deleteMany(filter);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default app;
