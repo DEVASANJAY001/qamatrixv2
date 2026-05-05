@@ -300,7 +300,12 @@ const DVXUploadSection = ({ onRefresh, dvxData, fetchDVXData }: { onRefresh: () 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(insertRows)
       });
-      if (!response.ok) throw new Error("DVX upload failed");
+      const ct = response.headers.get('content-type');
+      if (!response.ok) throw new Error(`DVX upload returned ${response.status}`);
+      if (!ct || !ct.includes('application/json')) {
+        throw new Error("API returned HTML instead of JSON. Check Vercel routing.");
+      }
+      const resData = await response.json();
 
       // Also insert into final_defect for legacy compatibility
       const finalRows = preview.map(r => ({
@@ -755,10 +760,16 @@ const DefectUpload = () => {
   const fetchDVXData = async () => {
     try {
       const res = await fetch('/api/dvx-defects');
+      const ct = res.headers.get('content-type');
+      if (!res.ok) throw new Error(`DVX Fetch returned ${res.status}`);
+      if (!ct || !ct.includes('application/json')) {
+        throw new Error("DVX API returned HTML. Check Vercel routing.");
+      }
       const data = await res.json();
-      if (res.ok) setDvxData(data as StoredDVXDefect[]);
-    } catch (err) {
+      setDvxData(data as StoredDVXDefect[]);
+    } catch (err: any) {
       console.error("Fetch DVX error:", err);
+      toast({ title: "DVX Load Error", description: err.message, variant: "destructive" });
     }
   };
 
@@ -767,10 +778,16 @@ const DefectUpload = () => {
     await fetchDVXData();
     try {
       const res = await fetch('/api/defect-data');
+      const ct = res.headers.get('content-type');
+      if (!res.ok) throw new Error(`Defect Data Fetch returned ${res.status}`);
+      if (!ct || !ct.includes('application/json')) {
+        throw new Error("Defect Data API returned HTML. Check Vercel routing.");
+      }
       const data = await res.json();
-      if (res.ok) setDefects(data as StoredDefect[]);
-    } catch (err) {
+      setDefects(data as StoredDefect[]);
+    } catch (err: any) {
       console.error("Fetch defects error:", err);
+      toast({ title: "Defect Load Error", description: err.message, variant: "destructive" });
     }
     setLoading(false);
   };

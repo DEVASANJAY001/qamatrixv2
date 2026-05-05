@@ -48,13 +48,21 @@ const DefectDashboard = () => {
         try {
             // 1. Fetch from defect_data (SCA, YARD, DVX legacy)
             const res1 = await fetch('/api/defect-data');
+            const ct1 = res1.headers.get('content-type');
+            if (!res1.ok) throw new Error(`Defect Data API returned ${res1.status}`);
+            if (!ct1 || !ct1.includes('application/json')) {
+                throw new Error("Defect Data API returned HTML instead of JSON. Check Vercel logs.");
+            }
             const dd = await res1.json();
-            if (!res1.ok) throw new Error(dd.error || "Failed to fetch defect_data");
 
             // 2. Fetch from dvx_defects (New DVX reports)
             const res2 = await fetch('/api/dvx-defects');
+            const ct2 = res2.headers.get('content-type');
+            if (!res2.ok) throw new Error(`DVX Defects API returned ${res2.status}`);
+            if (!ct2 || !ct2.includes('application/json')) {
+                throw new Error("DVX Defects API returned HTML instead of JSON. Check Vercel logs.");
+            }
             const dvx = await res2.json();
-            if (!res2.ok) throw new Error(dvx.error || "Failed to fetch dvx_defects");
 
             // Unify data structures
             const unified: DefectEntry[] = [
