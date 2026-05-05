@@ -39,7 +39,6 @@ const Glidepath = () => {
         filteredData.forEach(entry => {
             const severity = entry.defectRating;
             const control = entry.controlRating.Shop || 0;
-            const currentWeekRec = entry.weeklyRecurrence[5] || 0;
 
             // Map control rating to levels 1, 3, 5
             let level: 1 | 3 | 5 = 1;
@@ -47,7 +46,7 @@ const Glidepath = () => {
             else if (control >= 3) level = 3;
 
             if (matrix[level] && (severity === 1 || severity === 3 || severity === 5)) {
-                matrix[level][severity] += currentWeekRec > 0 ? currentWeekRec : 0;
+                matrix[level][severity]++;
             }
         });
 
@@ -64,14 +63,13 @@ const Glidepath = () => {
         filteredData.forEach(entry => {
             const severity = entry.defectRating;
             const control = entry.controlRating.Workstation || 0;
-            const currentWeekRec = entry.weeklyRecurrence[5] || 0;
 
             let level: 1 | 3 | 5 = 1;
             if (control >= 5) level = 5;
             else if (control >= 3) level = 3;
 
             if (matrix[level] && (severity === 1 || severity === 3 || severity === 5)) {
-                matrix[level][severity] += currentWeekRec > 0 ? currentWeekRec : 0;
+                matrix[level][severity]++;
             }
         });
 
