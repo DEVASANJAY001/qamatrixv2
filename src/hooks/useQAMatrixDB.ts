@@ -177,7 +177,16 @@ export function useQAMatrixDB() {
       const contentType = response.headers.get('content-type');
       
       if (!response.ok) {
-        throw new Error(`Server returned ${response.status} ${response.statusText}`);
+        let errorMessage = `Server returned ${response.status} ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.error) {
+            errorMessage = errorData.error;
+          }
+        } catch (e) {
+          // If response is not JSON, use default status text
+        }
+        throw new Error(errorMessage);
       }
 
       if (!contentType || !contentType.includes('application/json')) {

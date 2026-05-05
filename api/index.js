@@ -9,8 +9,8 @@ const dbName = process.env.DB_NAME || 'qamatrix';
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-let cachedDb = null;
 let cachedClient = null;
+let cachedDb = null;
 
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -18,7 +18,7 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
   let lastError;
   for (let i = 0; i < maxRetries; i++) {
     try {
-      const { default: fetch } = await import('node-fetch');
+      // Use global fetch (Node 18+)
       const response = await fetch(url, options);
       if (response.status === 429 || response.status >= 500) {
         const waitTime = (i + 1) * 10000;
@@ -37,24 +37,31 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
 
 async function connectDB() {
   if (cachedDb) return cachedDb;
+  
   if (!uri) {
-    throw new Error("MONGODB_URI environment variable is not defined");
+    console.error("MONGODB_URI is missing");
+    throw new Error("MONGODB_URI environment variable is not defined. Please add it to Vercel project settings.");
   }
+
   try {
-    cachedClient = new MongoClient(uri);
-    await cachedClient.connect();
+    if (!cachedClient) {
+      cachedClient = new MongoClient(uri, {
+        connectTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+      });
+      await cachedClient.connect();
+    }
     cachedDb = cachedClient.db(dbName);
     console.log(`Connected to MongoDB: ${dbName}`);
     return cachedDb;
   } catch (err) {
     console.error("MongoDB connection error:", err);
-    throw err;
+    throw new Error(`Failed to connect to database: ${err.message}`);
   }
 }
 
-// AI Functions
+// AI Functions (Modified to use global fetch)
 async function getOpenRouterMatches(apiKey, model, prompt) {
-  const { default: fetch } = await import('node-fetch');
   const response = await fetchWithRetry('https://openrouter.ai/api/v1/chat/completions', {
     method: "POST",
     headers: {
@@ -85,7 +92,6 @@ async function getOpenRouterMatches(apiKey, model, prompt) {
 }
 
 async function getOpenAIMatches(apiKey, prompt, defects, concerns) {
-  const { default: fetch } = await import('node-fetch');
   const response = await fetchWithRetry('https://api.openai.com/v1/chat/completions', {
     method: "POST",
     headers: {
@@ -113,7 +119,6 @@ async function getOpenAIMatches(apiKey, prompt, defects, concerns) {
 }
 
 async function getGeminiMatches(apiKey, prompt, defects, concerns) {
-  const { default: fetch } = await import('node-fetch');
   const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -180,6 +185,7 @@ app.get('/api/qa-matrix', async (req, res) => {
     const entries = await db.collection('qa_matrix_entries').find({}).sort({ s_no: 1 }).limit(10000).toArray();
     res.json(entries);
   } catch (err) {
+    console.error("GET /api/qa-matrix error:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -198,6 +204,7 @@ app.post('/api/qa-matrix/upsert', async (req, res) => {
       res.json({ success: true, result });
     }
   } catch (err) {
+    console.error("POST /api/qa-matrix/upsert error:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -391,6 +398,8 @@ app.post('/api/pair-by-semantic', async (req, res) => {
     }
     res.json({ paired: pairedCount, unpaired: defects.length - pairedCount });
   } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 // DVX Defects
 app.get('/api/dvx-defects', async (req, res) => {
   try {
