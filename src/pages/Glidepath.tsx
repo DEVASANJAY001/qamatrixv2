@@ -263,11 +263,7 @@ const Glidepath = () => {
 
                                                 return (
                                                     <td key={severity} className={`p-3 border text-center font-black text-sm ${colorClass}`}>
-                                                        {count > 0 ? (
-                                                            <span>
-                                                                {count} <span className="text-[10px] opacity-80">({rec})</span>
-                                                            </span>
-                                                        ) : ""}
+                                                        {count > 0 ? count : ""}
                                                     </td>
                                                 );
                                             })}
@@ -382,11 +378,7 @@ const Glidepath = () => {
 
                                                 return (
                                                     <td key={severity} className={`p-3 border text-center font-black text-sm ${colorClass}`}>
-                                                        {count > 0 ? (
-                                                            <span>
-                                                                {count} <span className="text-[10px] opacity-80">({rec})</span>
-                                                            </span>
-                                                        ) : ""}
+                                                        {count > 0 ? count : ""}
                                                     </td>
                                                 );
                                             })}
