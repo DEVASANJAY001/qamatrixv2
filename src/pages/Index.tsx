@@ -456,14 +456,6 @@ const Index = () => {
   const [showActions, setShowActions] = useState(false);
 
   const filteredData = useMemo(() => {
-    let result = data;
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      result = result.filter(d =>
-        d.concern.toLowerCase().includes(term) ||
-        d.operationStation.toLowerCase().includes(term) ||
-        d.sNo.toString().includes(term)
-      );
     return data.filter(d => {
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
@@ -474,8 +466,10 @@ const Index = () => {
       if (sourceFilter && d.source.toUpperCase() !== sourceFilter.toUpperCase()) return false;
       if (designationFilter && d.designation.toUpperCase() !== designationFilter.toUpperCase()) return false;
       if (ratingFilter && d.defectRating !== parseInt(ratingFilter)) return false;
-      if (statusFilter === "NG" && d.workstationStatus !== "NG" && d.mfgStatus !== "NG" && d.plantStatus !== "NG") return false;
-      if (statusFilter === "OK" && (d.workstationStatus !== "OK" || d.mfgStatus !== "OK" || d.plantStatus !== "OK")) return false;
+      
+      const isOK = d.workstationStatus === "OK" && d.mfgStatus === "OK" && d.plantStatus === "OK";
+      if (statusFilter === "NG" && isOK) return false;
+      if (statusFilter === "OK" && !isOK) return false;
 
       // Date range filter
       if (!startDate && !endDate) return true;
