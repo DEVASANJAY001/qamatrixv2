@@ -194,9 +194,14 @@ export function useQAMatrixDB() {
           console.error(`Error mapping row at index ${idx}:`, e, row);
           return null;
         }
-      }).filter(Boolean) as QAMatrixEntry[];
+      }).filter(Boolean).filter(entry => {
+        // Only include actual listed concerns (exclude placeholders and empty rows)
+        if (entry!.sNo === -9999) return false;
+        if (!entry!.concern || entry!.concern.trim() === "") return false;
+        return true;
+      }) as QAMatrixEntry[];
       
-      console.log(`Successfully mapped ${mapped.length} entries`);
+      console.log(`Successfully mapped ${mapped.length} entries (after filtering placeholders)`);
       setData(mapped);
     } catch (error: any) {
       console.error("Failed to load QA matrix:", error);

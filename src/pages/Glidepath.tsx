@@ -11,11 +11,15 @@ const Glidepath = () => {
 
     const filteredData = useMemo(() => {
         return data.filter(entry => {
+            // Only include actual listed concerns (exclude placeholders)
+            if (entry.sNo === -9999) return false;
+            if (!entry.concern || entry.concern.trim() === "") return false;
+
             if (!startDate && !endDate) return true;
             
             // Parse DD/MM/YYYY
             const parts = entry.detectionDate.split('/');
-            if (parts.length !== 3) return true; // Fallback for invalid dates
+            if (parts.length !== 3) return true; 
             
             const itemDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
             
