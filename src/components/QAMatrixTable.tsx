@@ -226,6 +226,7 @@ const QAMatrixTable = ({ data, filter, onClearFilter, onWeeklyUpdate, onScoreUpd
                 {/* New sections from screenshot */}
                 <th colSpan={4} className="hdr-label" style={{ background: '#92D050', color: 'black' }}>Control Rating</th>
                 <th colSpan={4} className="hdr-label" style={{ background: '#92D050', color: 'black' }}>Recorded Defect</th>
+                <th colSpan={3} className="hdr-label" style={{ background: '#FFC000', color: 'black' }}>Action & Responsibility</th>
                 <th colSpan={4} className="hdr-label" style={{ background: '#92D050', color: 'black' }}>Guaranteed level of quality</th>
 
                 <th rowSpan={3} className="hdr-label" style={{ minWidth: 60 }}>Actions</th>
@@ -256,22 +257,27 @@ const QAMatrixTable = ({ data, filter, onClearFilter, onWeeklyUpdate, onScoreUpd
                 <th rowSpan={2} className="hdr-impl">Audit Date & Name</th>
 
                 {/* Control Rating sub-headers */}
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Workstation</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Zone (Supervisor)</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Shop (GA, paintshop ...)</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Plant</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Workstation</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Zone (Supervisor)</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Shop (GA, paintshop ...)</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Plant</th>
 
                 {/* Recorded Defect sub-headers */}
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Workstation <br /> 1M</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Zone <br /> 3M</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Shop <br /> 3M</th>
-                <th className="hdr-label" style={{ background: '#D9D9D9', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>CUSTOMER <br /> 6M</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Workstation <br /> 1M</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Zone <br /> 3M</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Escaping Shop <br /> 3M</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#D9D9D9', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>CUSTOMER <br /> 6M</th>
+
+                {/* Action & Responsibility sub-headers */}
+                <th rowSpan={2} className="hdr-label" style={{ background: '#FFF2CC', color: 'black', fontSize: '8px', writingMode: 'vertical-rl', minWidth: '40px' }}>Action & Responsibility</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#FFF2CC', color: 'black', fontSize: '8px', writingMode: 'vertical-rl', minWidth: '40px' }}>Resp</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#FFF2CC', color: 'black', fontSize: '8px', writingMode: 'vertical-rl', minWidth: '40px' }}>Target Details</th>
 
                 {/* Guaranteed Quality sub-headers */}
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Workstation</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Zone (Neighbor Check, PQG...)</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Shop (GA, paintshop ...)</th>
-                <th className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Plant</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Workstation</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Zone (Neighbor Check, PQG...)</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Shop (GA, paintshop ...)</th>
+                <th rowSpan={2} className="hdr-label" style={{ background: '#E2EFDA', color: 'black', fontSize: '8px', writingMode: 'vertical-rl' }}>Plant</th>
               </tr>
 
               {/* Row 3: Station labels */}
@@ -411,6 +417,38 @@ const QAMatrixTable = ({ data, filter, onClearFilter, onWeeklyUpdate, onScoreUpd
                         />
                       </td>
                     ))}
+
+                    {/* Action & Responsibility Data — Editable */}
+                    <td className="data-row p-0" onClick={e => e.stopPropagation()}>
+                      <input
+                        type="text"
+                        value={entry.mfgAction || ""}
+                        readOnly={readOnly}
+                        onChange={e => !readOnly && onFieldUpdate?.(entry.sNo, "mfgAction", e.target.value)}
+                        className={`w-full h-full text-left font-medium text-[9px] border-0 focus:ring-1 focus:ring-amber-400 outline-none bg-transparent px-1 ${readOnly ? "cursor-default pointer-events-none" : ""}`}
+                        style={{ minWidth: 60, padding: '2px 4px' }}
+                      />
+                    </td>
+                    <td className="data-row p-0" onClick={e => e.stopPropagation()}>
+                      <input
+                        type="text"
+                        value={entry.resp || ""}
+                        readOnly={readOnly}
+                        onChange={e => !readOnly && onFieldUpdate?.(entry.sNo, "resp", e.target.value)}
+                        className={`w-full h-full text-center font-medium text-[9px] border-0 focus:ring-1 focus:ring-amber-400 outline-none bg-transparent ${readOnly ? "cursor-default pointer-events-none" : ""}`}
+                        style={{ minWidth: 40, padding: '2px 0' }}
+                      />
+                    </td>
+                    <td className="data-row p-0" onClick={e => e.stopPropagation()}>
+                      <input
+                        type="text"
+                        value={entry.target || ""}
+                        readOnly={readOnly}
+                        onChange={e => !readOnly && onFieldUpdate?.(entry.sNo, "target", e.target.value)}
+                        className={`w-full h-full text-center font-medium text-[9px] border-0 focus:ring-1 focus:ring-amber-400 outline-none bg-transparent ${readOnly ? "cursor-default pointer-events-none" : ""}`}
+                        style={{ minWidth: 40, padding: '2px 0' }}
+                      />
+                    </td>
 
                     {/* Guaranteed Quality Data — Editable OK/NG */}
                     {(["Workstation", "Zone", "Shop", "Plant"] as const).map(k => (

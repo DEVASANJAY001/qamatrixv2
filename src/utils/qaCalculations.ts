@@ -59,7 +59,7 @@ export function recalculateStatuses(entry: QAMatrixEntry): QAMatrixEntry {
       Shop: shopRatingValue,
       Plant: plantRatingValue
     },
-    recordedDefect: {
+    recordedDefect: entry.recordedDefect || {
       workstation: null,
       zone: null,
       shop: null,
