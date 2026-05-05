@@ -15,7 +15,7 @@ import { exportToCSV } from "@/utils/csvExport";
 import { exportToXLSX } from "@/utils/xlsxExport";
 import { aiMatchDefects } from "@/utils/aiMatch";
 import { useQAMatrixDB } from "@/hooks/useQAMatrixDB";
-import { Shield, Search, Filter, X, Download, FileSpreadsheet, RotateCcw, Repeat, Undo2, Database, Loader2, Trash2, Lock, AlertTriangle, History as HistoryIcon, Save, BarChart3, ChevronDown } from "lucide-react";
+import { Shield, Search, Filter, X, Download, FileSpreadsheet, RotateCcw, Repeat, Undo2, Database, Loader2, Trash2, Lock, AlertTriangle, History as HistoryIcon, Save, BarChart3, ChevronDown, Calendar } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
