@@ -163,6 +163,16 @@ async function getGeminiMatches(apiKey, prompt, defects, concerns) {
   return toolCall.args.matches;
 }
 
+// Health Check
+app.get('/api/health', async (req, res) => {
+  try {
+    const db = await connectDB();
+    res.json({ status: "ok", database: "connected", dbName: dbName });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message, env_check: uri ? "URI present" : "URI MISSING" });
+  }
+});
+
 // API Routes
 app.get('/api/qa-matrix', async (req, res) => {
   try {
