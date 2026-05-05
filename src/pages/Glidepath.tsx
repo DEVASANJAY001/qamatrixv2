@@ -1,11 +1,29 @@
-import { useState, useMemo } from "react";
-import { useQAMatrixDB } from "@/hooks/useQAMatrixDB";
-import { Link } from "react-router-dom";
-import { ArrowLeft, BarChart3, LayoutDashboard, Settings, HelpCircle, ShieldAlert } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar, Filter, X } from "lucide-react";
 
 const Glidepath = () => {
     const { data, loading } = useQAMatrixDB();
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    const filteredData = useMemo(() => {
+        return data.filter(entry => {
+            if (!startDate && !endDate) return true;
+            
+            // Parse DD/MM/YYYY
+            const parts = entry.detectionDate.split('/');
+            if (parts.length !== 3) return true; // Fallback for invalid dates
+            
+            const itemDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+            
+            if (startDate && itemDate < new Date(startDate)) return false;
+            if (endDate) {
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+                if (itemDate > end) return false;
+            }
+            return true;
+        });
+    }, [data, startDate, endDate]);
 
     const mfgMatrix = useMemo(() => {
         const matrix = {
@@ -30,7 +48,7 @@ const Glidepath = () => {
         });
 
         return matrix;
-    }, [data]);
+    }, [filteredData]);
 
     const wsMatrix = useMemo(() => {
         const matrix = {
@@ -54,7 +72,7 @@ const Glidepath = () => {
         });
 
         return matrix;
-    }, [data]);
+    }, [filteredData]);
 
     const glidepathData = useMemo(() => {
         // Mapping for lower matrix: [severity][control]
@@ -80,7 +98,7 @@ const Glidepath = () => {
         });
 
         return matrix;
-    }, [data]);
+    }, [filteredData]);
 
     if (loading) {
         return (
@@ -112,6 +130,33 @@ const Glidepath = () => {
                                 <LayoutDashboard className="h-4 w-4" /> Dashboard
                             </Button>
                         </Link>
+                        <div className="h-6 w-px bg-slate-200 mx-2 hidden sm:block" />
+                        <div className="flex items-center gap-2 bg-slate-50 border px-2 py-1 rounded-lg">
+                            <Calendar className="h-3.5 w-3.5 text-slate-500" />
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                                className="bg-transparent border-0 text-xs focus:ring-0 p-0 w-28 font-medium"
+                            />
+                            <span className="text-slate-300">—</span>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
+                                className="bg-transparent border-0 text-xs focus:ring-0 p-0 w-28 font-medium"
+                            />
+                            {(startDate || endDate) && (
+                                <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-5 w-5 hover:bg-slate-200" 
+                                    onClick={() => { setStartDate(""); setEndDate(""); }}
+                                >
+                                    <X className="h-3 w-3" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </nav>

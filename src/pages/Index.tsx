@@ -38,6 +38,8 @@ const Index = () => {
   const [designationFilter, setDesignationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [ratingFilter, setRatingFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   // Lifted repeat state
   const [dvxEntries, setDvxEntries] = useState<DVXEntry[]>([]);
@@ -462,16 +464,37 @@ const Index = () => {
         d.operationStation.toLowerCase().includes(term) ||
         d.sNo.toString().includes(term)
       );
-    }
-    if (sourceFilter) result = result.filter(d => d.source.toUpperCase() === sourceFilter.toUpperCase());
-    if (designationFilter) result = result.filter(d => d.designation.toUpperCase() === designationFilter.toUpperCase());
-    if (ratingFilter) result = result.filter(d => d.defectRating === Number(ratingFilter));
-    if (statusFilter === "NG") result = result.filter(d => d.workstationStatus === "NG" || d.mfgStatus === "NG" || d.plantStatus === "NG");
-    if (statusFilter === "OK") result = result.filter(d => d.workstationStatus === "OK" && d.mfgStatus === "OK" && d.plantStatus === "OK");
-    return result;
-  }, [data, searchTerm, sourceFilter, designationFilter, ratingFilter, statusFilter]);
+    return data.filter(d => {
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        if (!d.concern.toLowerCase().includes(term) &&
+            !d.operationStation.toLowerCase().includes(term) &&
+            !d.sNo.toString().includes(term)) return false;
+      }
+      if (sourceFilter && d.source.toUpperCase() !== sourceFilter.toUpperCase()) return false;
+      if (designationFilter && d.designation.toUpperCase() !== designationFilter.toUpperCase()) return false;
+      if (ratingFilter && d.defectRating !== parseInt(ratingFilter)) return false;
+      if (statusFilter === "NG" && d.workstationStatus !== "NG" && d.mfgStatus !== "NG" && d.plantStatus !== "NG") return false;
+      if (statusFilter === "OK" && (d.workstationStatus !== "OK" || d.mfgStatus !== "OK" || d.plantStatus !== "OK")) return false;
 
-  const hasActiveFilters = sourceFilter || designationFilter || statusFilter || ratingFilter || searchTerm;
+      // Date range filter
+      if (!startDate && !endDate) return true;
+      const parts = d.detectionDate.split('/');
+      if (parts.length === 3) {
+        const itemDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+        if (startDate && itemDate < new Date(startDate)) return false;
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          if (itemDate > end) return false;
+        }
+      }
+
+      return true;
+    });
+  }, [data, searchTerm, sourceFilter, designationFilter, statusFilter, ratingFilter, startDate, endDate]);
+
+  const hasActiveFilters = sourceFilter || designationFilter || statusFilter || ratingFilter || searchTerm || startDate || endDate;
 
   const clearAllFilters = () => {
     setSearchTerm("");
@@ -479,6 +502,8 @@ const Index = () => {
     setDesignationFilter("");
     setStatusFilter("");
     setRatingFilter("");
+    setStartDate("");
+    setEndDate("");
     setFilter(null);
   };
 
@@ -648,6 +673,26 @@ const Index = () => {
                   <option value="NG">Has NG</option>
                   <option value="OK">All OK</option>
                 </select>
+
+                <div className="flex items-center gap-2 px-3 py-1 text-sm border border-input rounded-md bg-background min-w-fit">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase flex items-center gap-1.5">
+                    <Calendar className="w-3 h-3" />
+                    Range
+                  </span>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent border-0 text-xs focus:ring-0 p-1 w-28"
+                  />
+                  <span className="text-muted-foreground">—</span>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent border-0 text-xs focus:ring-0 p-1 w-28"
+                  />
+                </div>
               </div>
               {hasActiveFilters && (
                 <p className="text-xs text-muted-foreground">Showing {filteredData.length} of {data.length} concerns</p>

@@ -37,10 +37,19 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
 
 async function connectDB() {
   if (cachedDb) return cachedDb;
-  cachedClient = new MongoClient(uri);
-  await cachedClient.connect();
-  cachedDb = cachedClient.db(dbName);
-  return cachedDb;
+  if (!uri) {
+    throw new Error("MONGODB_URI environment variable is not defined");
+  }
+  try {
+    cachedClient = new MongoClient(uri);
+    await cachedClient.connect();
+    cachedDb = cachedClient.db(dbName);
+    console.log(`Connected to MongoDB: ${dbName}`);
+    return cachedDb;
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    throw err;
+  }
 }
 
 // AI Functions
@@ -197,8 +206,10 @@ app.delete('/api/qa-matrix/:sNo', async (req, res) => {
 app.delete('/api/qa-matrix', async (req, res) => {
   try {
     const db = await connectDB();
-    const result = await db.collection('qa_matrix_entries').deleteMany({ s_no: { $ne: -9999 } });
-    res.json(result);
+    const r1 = await db.collection('qa_matrix_entries').deleteMany({ s_no: { $ne: -9999 } });
+    const r2 = await db.collection('defect_data').deleteMany({});
+    const r3 = await db.collection('dvx_defects').deleteMany({});
+    res.json({ success: true, matrixDeleted: r1.deletedCount, defectDataDeleted: r2.deletedCount, dvxDeleted: r3.deletedCount });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
