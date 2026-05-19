@@ -521,6 +521,11 @@
 .sqam-sticky-col-12 {
   left: 640px;
   z-index: 12;
+}
+
+.sqam-sticky-col-13 {
+  left: 672px;
+  z-index: 12;
   border-right: 3px double #333 !important;
 }
 

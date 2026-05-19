@@ -40,6 +40,7 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
   const [dvrDVT, setDvrDVT] = useState("");
   const [productAuditSCA, setProductAuditSCA] = useState("");
   const [warranty, setWarranty] = useState("");
+  const [reoccurrence, setReoccurrence] = useState("");
   const [implementationDate, setImplementationDate] = useState("");
   const [auditDateName, setAuditDateName] = useState("");
 
@@ -81,7 +82,7 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
         dvrDVT: dvrDVT,
         productAuditSCA: productAuditSCA,
         warranty: warranty,
-        reoccurrence: '',
+        reoccurrence: reoccurrence,
       },
       implementationDate: implementationDate,
       auditDateName: auditDateName,
@@ -97,6 +98,7 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
     setResp("");
     setAction("");
     setTarget("");
+    setReoccurrence("");
   };
 
   return (
@@ -107,7 +109,7 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
           Add Concern
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto bg-white">
         <DialogHeader>
           <DialogTitle>Add New Concern</DialogTitle>
           <DialogDescription>
@@ -186,40 +188,55 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
               <Input id="target" placeholder="e.g. WK12" value={target} onChange={(e) => setTarget(e.target.value)} />
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-3">
+          
+          <div className="grid grid-cols-5 gap-2">
             <div className="space-y-1.5">
-              <Label htmlFor="dvmPQG">DVM/PQG</Label>
-              <select id="dvmPQG" value={dvmPQG} onChange={(e) => setDvmPQG(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+              <Label htmlFor="dvmPQG" className="text-[10px] sm:text-xs">DVM/PQG</Label>
+              <select id="dvmPQG" value={dvmPQG} onChange={(e) => setDvmPQG(e.target.value)} className="w-full px-2 py-1.5 text-xs border border-input rounded-md bg-background">
                 <option value="">—</option>
                 <option value="Y">Y</option>
                 <option value="N">N</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="dvrDVT">DVR/DVT</Label>
-              <select id="dvrDVT" value={dvrDVT} onChange={(e) => setDvrDVT(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+              <Label htmlFor="dvrDVT" className="text-[10px] sm:text-xs">DVR/DVT</Label>
+              <select id="dvrDVT" value={dvrDVT} onChange={(e) => setDvrDVT(e.target.value)} className="w-full px-2 py-1.5 text-xs border border-input rounded-md bg-background">
                 <option value="">—</option>
                 <option value="Y">Y</option>
                 <option value="N">N</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="productAuditSCA">Audit SCA</Label>
-              <select id="productAuditSCA" value={productAuditSCA} onChange={(e) => setProductAuditSCA(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+              <Label htmlFor="productAuditSCA" className="text-[10px] sm:text-xs">Audit SCA</Label>
+              <select id="productAuditSCA" value={productAuditSCA} onChange={(e) => setProductAuditSCA(e.target.value)} className="w-full px-2 py-1.5 text-xs border border-input rounded-md bg-background">
                 <option value="">—</option>
                 <option value="Y">Y</option>
                 <option value="N">N</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="warranty">Warranty</Label>
-              <select id="warranty" value={warranty} onChange={(e) => setWarranty(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+              <Label htmlFor="warranty" className="text-[10px] sm:text-xs">Warranty</Label>
+              <select id="warranty" value={warranty} onChange={(e) => setWarranty(e.target.value)} className="w-full px-2 py-1.5 text-xs border border-input rounded-md bg-background">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="N">N</option>
+                <option value="Y/N">Y/N</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="reoccurrence" className="text-[10px] sm:text-xs whitespace-nowrap">Reoccurrence</Label>
+              <select id="reoccurrence" value={reoccurrence} onChange={(e) => setReoccurrence(e.target.value)} className="w-full px-2 py-1.5 text-xs border border-input rounded-md bg-background" title="Reoccurrence Broken Clean Point">
                 <option value="">—</option>
                 <option value="Y">Y</option>
                 <option value="N">N</option>
               </select>
             </div>
           </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="implDate">Implementation Date</Label>

@@ -113,6 +113,17 @@ const Index = () => {
         };
       }
 
+      if (["dvmPQG", "dvrDVT", "productAuditSCA", "warranty", "reoccurrence"].includes(field)) {
+        const updated = {
+          ...entry,
+          detectionFlags: {
+            ...entry.detectionFlags,
+            [field]: value
+          }
+        };
+        return recalculateStatuses(updated);
+      }
+
       return { ...entry, [field]: value };
     }));
   };

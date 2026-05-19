@@ -352,13 +352,107 @@ const QAMatrixTable = ({ data, filter, onClearFilter, onWeeklyUpdate, onScoreUpd
                         entry.detectionFlags?.repairTime ?? ""
                       )}
                     </td>
-
-                    <td className="data-row sqam-sticky-col sqam-sticky-col-8" style={{ color: entry.detectionFlags?.dvmPQG === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold' }}>{entry.detectionFlags?.dvmPQG ?? ""}</td>
-                    <td className="data-row sqam-sticky-col sqam-sticky-col-9" style={{ color: entry.detectionFlags?.dvrDVT === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold' }}>{entry.detectionFlags?.dvrDVT ?? ""}</td>
-                    <td className="data-row sqam-sticky-col sqam-sticky-col-10" style={{ color: entry.detectionFlags?.productAuditSCA === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold' }}>{entry.detectionFlags?.productAuditSCA ?? ""}</td>
-                    <td className="data-row sqam-sticky-col sqam-sticky-col-11">{entry.detectionFlags?.warranty ?? ""}</td>
-                    <td className={`data-row sqam-sticky-col sqam-sticky-col-12 ${entry.defectRating === 1 ? 'def-1' : entry.defectRating === 3 ? 'def-3' : 'def-5'}`}>{entry.defectRating}</td>
-                    <td className="data-row col-reoc sqam-sticky-col sqam-sticky-col-13">{entry.detectionFlags?.reoccurrence ?? ""}</td>
+                    <td className="data-row sqam-sticky-col sqam-sticky-col-8" style={{ color: entry.detectionFlags?.dvmPQG === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold', padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.dvmPQG ?? ""}
+                          onChange={(e) => setEditFields(f => ({ ...f, dvmPQG: e.target.value }))}
+                          className="w-full h-full text-center font-bold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="">—</option>
+                          <option value="Y">Y</option>
+                          <option value="N">N</option>
+                        </select>
+                      ) : (
+                        entry.detectionFlags?.dvmPQG ?? ""
+                      )}
+                    </td>
+                    <td className="data-row sqam-sticky-col sqam-sticky-col-9" style={{ color: entry.detectionFlags?.dvrDVT === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold', padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.dvrDVT ?? ""}
+                          onChange={(e) => setEditFields(f => ({ ...f, dvrDVT: e.target.value }))}
+                          className="w-full h-full text-center font-bold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="">—</option>
+                          <option value="Y">Y</option>
+                          <option value="N">N</option>
+                        </select>
+                      ) : (
+                        entry.detectionFlags?.dvrDVT ?? ""
+                      )}
+                    </td>
+                    <td className="data-row sqam-sticky-col sqam-sticky-col-10" style={{ color: entry.detectionFlags?.productAuditSCA === 'Y' ? '#1B5E20' : '#B71C1C', fontWeight: 'bold', padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.productAuditSCA ?? ""}
+                          onChange={(e) => setEditFields(f => ({ ...f, productAuditSCA: e.target.value }))}
+                          className="w-full h-full text-center font-bold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="">—</option>
+                          <option value="Y">Y</option>
+                          <option value="N">N</option>
+                        </select>
+                      ) : (
+                        entry.detectionFlags?.productAuditSCA ?? ""
+                      )}
+                    </td>
+                    <td className="data-row sqam-sticky-col sqam-sticky-col-11" style={{ padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.warranty ?? ""}
+                          onChange={(e) => setEditFields(f => ({ ...f, warranty: e.target.value }))}
+                          className="w-full h-full text-center font-semibold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="">—</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="N">N</option>
+                          <option value="Y/N">Y/N</option>
+                        </select>
+                      ) : (
+                        entry.detectionFlags?.warranty ?? ""
+                      )}
+                    </td>
+                    <td className={`data-row sqam-sticky-col sqam-sticky-col-12 ${entry.defectRating === 1 ? 'def-1' : entry.defectRating === 3 ? 'def-3' : 'def-5'}`} style={{ padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.defectRating ?? "1"}
+                          onChange={(e) => setEditFields(f => ({ ...f, defectRating: e.target.value }))}
+                          className="w-full h-full text-center font-bold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="1">1</option>
+                          <option value="3">3</option>
+                          <option value="5">5</option>
+                        </select>
+                      ) : (
+                        entry.defectRating
+                      )}
+                    </td>
+                    <td className="data-row col-reoc sqam-sticky-col sqam-sticky-col-13" style={{ padding: editingRow === entry.sNo ? 0 : '0 4px' }}>
+                      {editingRow === entry.sNo ? (
+                        <select
+                          value={editFields.reoccurrence ?? ""}
+                          onChange={(e) => setEditFields(f => ({ ...f, reoccurrence: e.target.value }))}
+                          className="w-full h-full text-center font-semibold text-[9px] border-0 focus:ring-1 outline-none bg-primary/5 cursor-pointer"
+                          style={{ minWidth: 32, padding: '2px 0' }}
+                        >
+                          <option value="">—</option>
+                          <option value="Y">Y</option>
+                          <option value="N">N</option>
+                        </select>
+                      ) : (
+                        entry.detectionFlags?.reoccurrence ?? ""
+                      )}
+                    </td>
 
 
                     {trimKeys.map(k => (
@@ -473,7 +567,7 @@ const QAMatrixTable = ({ data, filter, onClearFilter, onWeeklyUpdate, onScoreUpd
                             {editingRow === entry.sNo ? (
                               <button onClick={() => { Object.entries(editFields).forEach(([field, value]) => { onFieldUpdate?.(entry.sNo, field, value); }); setEditingRow(null); setEditFields({}); }} className="p-1 rounded hover:bg-primary/10 text-primary" title="Save"><Check className="w-3.5 h-3.5" /></button>
                             ) : (
-                              <button onClick={() => { setEditingRow(entry.sNo); setEditFields({ sNo: entry.sNo.toString(), detectionDate: entry.detectionDate || "", repairTime: entry.detectionFlags?.repairTime || "", source: entry.source, operationStation: entry.operationStation, designation: entry.designation, teamLeader: entry.teamLeader ?? entry.resp, concern: entry.concern, defectCode: entry.defectCode, defectLocationCode: entry.defectLocationCode, mfgAction: entry.mfgAction, resp: entry.resp, target: entry.target }); }} className="p-1 rounded hover:bg-primary/10 text-muted-foreground" title="Edit"><Pencil className="w-3.5 h-3.5" /></button>
+                              <button onClick={() => { setEditingRow(entry.sNo); setEditFields({ sNo: entry.sNo.toString(), detectionDate: entry.detectionDate || "", repairTime: entry.detectionFlags?.repairTime || "", source: entry.source, operationStation: entry.operationStation, designation: entry.designation, teamLeader: entry.teamLeader ?? entry.resp, concern: entry.concern, defectCode: entry.defectCode, defectLocationCode: entry.defectLocationCode, mfgAction: entry.mfgAction, resp: entry.resp, target: entry.target, dvmPQG: entry.detectionFlags?.dvmPQG || "", dvrDVT: entry.detectionFlags?.dvrDVT || "", productAuditSCA: entry.detectionFlags?.productAuditSCA || "", warranty: entry.detectionFlags?.warranty || "", defectRating: entry.defectRating.toString(), reoccurrence: entry.detectionFlags?.reoccurrence || "" }); }} className="p-1 rounded hover:bg-primary/10 text-muted-foreground" title="Edit"><Pencil className="w-3.5 h-3.5" /></button>
                             )}
                             <button onClick={() => { if (confirm(`Delete concern #${entry.sNo}?`)) { onDeleteEntry?.(entry.sNo); } }} className="p-1 rounded hover:bg-destructive/10 text-destructive" title="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
                           </>

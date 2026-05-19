@@ -49,10 +49,17 @@ export function recalculateStatuses(entry: QAMatrixEntry): QAMatrixEntry {
   const shopGQ: Status = (shopRatingValue >= dr) ? "OK" : "NG";
   const plantGQ: Status = "OK"; // Plant usually OK per instructions
 
+  const currentFlags = entry.detectionFlags || {};
+  const updatedFlags = {
+    ...currentFlags,
+    reoccurrence: hasRecurrence ? "Y" : (currentFlags.reoccurrence || "N")
+  };
+
   return {
     ...entry,
     recurrence,
     recurrenceCountPlusDefect,
+    detectionFlags: updatedFlags,
     controlRating: {
       Workstation: workstationRating,
       Zone: zoneRatingValue,
