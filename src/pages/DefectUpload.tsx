@@ -831,7 +831,9 @@ const DefectUpload = () => {
           <Link to="/" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
             <ArrowLeft className="w-5 h-5 text-primary" />
           </Link>
-          <div className="p-2 rounded-lg bg-primary/10"><Shield className="w-5 h-5 text-primary" /></div>
+          <div className="flex items-center">
+            <img src="/stellantislogo.png" alt="Stellantis" className="h-8 w-auto object-contain" />
+          </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight">Defect Data Upload</h1>
             <p className="text-[11px] text-muted-foreground">Upload defect data for DVX, SCA, and YARD teams</p>

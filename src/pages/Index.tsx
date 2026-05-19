@@ -460,13 +460,13 @@ const Index = () => {
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         if (!d.concern.toLowerCase().includes(term) &&
-            !d.operationStation.toLowerCase().includes(term) &&
-            !d.sNo.toString().includes(term)) return false;
+          !d.operationStation.toLowerCase().includes(term) &&
+          !d.sNo.toString().includes(term)) return false;
       }
       if (sourceFilter && d.source.toUpperCase() !== sourceFilter.toUpperCase()) return false;
       if (designationFilter && d.designation.toUpperCase() !== designationFilter.toUpperCase()) return false;
       if (ratingFilter && d.defectRating !== parseInt(ratingFilter)) return false;
-      
+
       const isOK = d.workstationStatus === "OK" && d.mfgStatus === "OK" && d.plantStatus === "OK";
       if (statusFilter === "NG" && isOK) return false;
       if (statusFilter === "OK" && !isOK) return false;
@@ -507,17 +507,17 @@ const Index = () => {
         <div className="max-w-[1800px] mx-auto px-4 py-3">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center justify-between w-full md:w-auto">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Shield className="w-5 h-5 text-primary" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex items-center">
+                  <img src="/stellantislogo.png" alt="Stellantis" className="h-6 sm:h-8 w-auto object-contain" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold tracking-tight">QA Matrix</h1>
-                  <p className="text-[11px] text-muted-foreground hidden xs:block">Quality Assurance Control & Monitoring System</p>
+                  <h1 className="text-sm sm:text-lg font-bold tracking-tight">QA Matrix</h1>
+                  <p className="text-[9px] sm:text-[11px] text-muted-foreground block leading-tight">QCP Smart Projects — Quality Assurance Control & Monitoring System</p>
                 </div>
               </div>
 
-              <div className="flex md:hidden items-center gap-2">
+              <div className="hidden items-center gap-2">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -547,17 +547,17 @@ const Index = () => {
               </button>
             </div>
 
-            <div className={`${showActions ? "flex" : "hidden"} md:flex items-center gap-2 flex-wrap sm:flex-nowrap order-4 md:order-3 w-full md:w-auto justify-center`}>
-              <Link to="/defect-upload" className="flex-1 sm:flex-initial">
+            <div className="flex md:flex items-center gap-2 flex-wrap sm:flex-nowrap order-4 md:order-3 w-full md:w-auto justify-center">
+              <Link to="/defect-upload" className="flex-1 sm:flex-initial hidden md:block">
                 <Button size="sm" variant="outline" className="gap-1.5 h-8 w-full justify-start md:justify-center">
                   <Database className="w-3.5 h-3.5" />
-                  Upload
+                  Defect Upload
                 </Button>
               </Link>
               <Link to="/defect-dashboard" className="flex-1 sm:flex-initial">
                 <Button size="sm" variant="outline" className="gap-1.5 h-8 w-full justify-start md:justify-center border-emerald-500/30 hover:bg-emerald-500/5">
                   <BarChart3 className="w-3.5 h-3.5 text-emerald-500" />
-                  Dashboard
+                  Defect Dashboard
                 </Button>
               </Link>
               <Link to="/glidepath" className="flex-1 sm:flex-initial">
@@ -576,7 +576,7 @@ const Index = () => {
           </div>
 
           {activeTab === "matrix" && (
-            <div className={`${showActions ? "flex" : "hidden"} md:flex items-center gap-1.5 mt-3 pt-3 border-t border-border/50 flex-wrap justify-between`}>
+            <div className="hidden md:flex items-center gap-1.5 mt-3 pt-3 border-t border-border/50 flex-wrap justify-between">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <FileUploadDialog nextSNo={data.length + 1} onImport={handleFileImport} />
                 <Button
@@ -605,7 +605,7 @@ const Index = () => {
 
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground" onClick={() => refreshFromDB()} title="Reload from database">
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className={`w-3.5 h-3.5 ${dbLoading ? 'animate-spin' : ''}`} />
                 </Button>
                 <div className="h-4 w-[1px] bg-border mx-1" />
                 <Button
@@ -693,8 +693,10 @@ const Index = () => {
               )}
             </div>
 
-            <div>
-              <h2 className="section-header mb-3">QA Matrix Details</h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="section-header">QA Matrix Details</h2>
+              <AddConcernDialog nextSNo={data.length + 1} onAdd={handleAddConcern} />
+            </div>
               <QAMatrixTable
                 data={filteredData}
                 filter={filter}
@@ -705,7 +707,6 @@ const Index = () => {
                 onDeleteEntry={handleDeleteEntry}
                 onRatingUpdate={handleRatingUpdate}
               />
-            </div>
           </>
         ) : (
           <RepeatsTab

@@ -35,6 +35,13 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
   const [defectCode, setDefectCode] = useState("");
   const [locationCode, setLocationCode] = useState("");
   const [repairTime, setRepairTime] = useState("");
+  const [detectionDate, setDetectionDate] = useState("");
+  const [dvmPQG, setDvmPQG] = useState("");
+  const [dvrDVT, setDvrDVT] = useState("");
+  const [productAuditSCA, setProductAuditSCA] = useState("");
+  const [warranty, setWarranty] = useState("");
+  const [implementationDate, setImplementationDate] = useState("");
+  const [auditDateName, setAuditDateName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,14 +77,15 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
       target,
       detectionFlags: {
         repairTime,
-        dvmPQG: '',
-        dvrDVT: '',
-        productAuditSCA: '',
-        warranty: '',
+        dvmPQG: dvmPQG,
+        dvrDVT: dvrDVT,
+        productAuditSCA: productAuditSCA,
+        warranty: warranty,
         reoccurrence: '',
       },
-      implementationDate: '',
-      auditDateName: '',
+      implementationDate: implementationDate,
+      auditDateName: auditDateName,
+      detectionDate: detectionDate,
     };
 
     onAdd(recalculateStatuses(entry));
@@ -168,9 +176,59 @@ const AddConcernDialog = ({ nextSNo, onAdd }: AddConcernDialogProps) => {
               <Input id="repairTime" placeholder="mins" value={repairTime} onChange={(e) => setRepairTime(e.target.value)} />
             </div>
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="target">Target</Label>
-            <Input id="target" placeholder="e.g. WK12" value={target} onChange={(e) => setTarget(e.target.value)} />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="detectionDate">Detection Date</Label>
+              <Input id="detectionDate" type="date" value={detectionDate} onChange={(e) => setDetectionDate(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="target">Target</Label>
+              <Input id="target" placeholder="e.g. WK12" value={target} onChange={(e) => setTarget(e.target.value)} />
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="dvmPQG">DVM/PQG</Label>
+              <select id="dvmPQG" value={dvmPQG} onChange={(e) => setDvmPQG(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+                <option value="">—</option>
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="dvrDVT">DVR/DVT</Label>
+              <select id="dvrDVT" value={dvrDVT} onChange={(e) => setDvrDVT(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+                <option value="">—</option>
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="productAuditSCA">Audit SCA</Label>
+              <select id="productAuditSCA" value={productAuditSCA} onChange={(e) => setProductAuditSCA(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+                <option value="">—</option>
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="warranty">Warranty</Label>
+              <select id="warranty" value={warranty} onChange={(e) => setWarranty(e.target.value)} className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background">
+                <option value="">—</option>
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="implDate">Implementation Date</Label>
+              <Input id="implDate" type="date" value={implementationDate} onChange={(e) => setImplementationDate(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="auditDateName">Audit Date & Name</Label>
+              <Input id="auditDateName" placeholder="Date/Name" value={auditDateName} onChange={(e) => setAuditDateName(e.target.value)} />
+            </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
